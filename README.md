@@ -1,0 +1,2 @@
+# 723ClipStudioTextImporter
+クリスタから書き出したテキストの内容を、各ページに自動配置するInDesignスクリプト
