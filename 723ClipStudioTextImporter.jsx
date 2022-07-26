@@ -3,7 +3,8 @@ app.menuActions.item('$ID/Selection Tool').invoke();
 var fontObj=app.activeWindow.activePage.textFrames.add();
 if (fontObj===undefined || fontObj.constructor.name !== "TextFrame") {
 	alert("「配置開始ページの基準となるテキストフレーム」が選択されていません。\n\n配置を開始するページにテキストフレームを作成し、選択した状態でスクリプトを実行してください。");
-   exit();
+	fontObj.remove();
+	exit();
 }
 var activePageNum = fontObj.parentPage.name,
 	orientation = fontObj.parentStory.storyPreferences.storyOrientation,
@@ -27,19 +28,19 @@ if(orientation == 1752134266){
         }
 app.menuActions.item('$ID/Type Tool').invoke();
 var question = confirm("テキストの配置を開始します。\n配置されるテキストの段落スタイルは、文字ツールで選択中の内容と同一になります。\n\n配置を開始するページ：" + activePageNum + "\nフォント：" + fontFamily  + " " + fontStyle + "\nフォントサイズ：" + fontSize+ "\n行送り：" + leadingTEXT + "\n組み方向：" + orientationTEXT +"\n\n問題なければ、クリスタから書き出されたテキストファイルを選択してください。");
-if(question){}else{exit();}
+if(question){}else{ fontObj.remove(); exit();}
 var txtFile = File.openDialog ("CLIP STUDIO PAINTから書き出されたテキストファイルを選択してください","*.txt");
 var dataArray = new Array();
 if(txtFile != "" && txtFile != null){
      txtFile.open("r")
     var txtStr=txtFile.read();
         var txtData = new Array();
-        if (txtStr=== ""){alert("空のテキストファイルが読み込まれました。処理を中断します。");　exit();}
+        if (txtStr=== ""){alert("空のテキストファイルが読み込まれました。処理を中断します。"); fontObj.remove(); exit();}
         var bubbles = txtStr.split("\n\n\n");
 		var strings = bubbles[0].split("\n");
 		var startPageNum = strings[0].replace("<<", "");
          var result = startPageNum.indexOf( "Page>>", 0);
-         if (result === -1){alert("ページ数表記が見つかりません。処理を中断します。\n\n対象のファイルが、クリスタから書き出された形式のものか確認してください。");　exit();}
+         if (result === -1){alert("ページ数表記が見つかりません。処理を中断します。\n\n対象のファイルが、クリスタから書き出された形式のものか確認してください。"); fontObj.remove(); exit();}
 		startPageNum = startPageNum.replace("Page>>", "");
 		startPageNum = startPageNum.split(",");
 		var startPageNum = startPageNum[0];
