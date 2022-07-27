@@ -1,10 +1,32 @@
 app.doScript(function(){
-app.menuActions.item('$ID/Selection Tool').invoke();
 var fontObj=app.activeWindow.activePage.textFrames.add();
+//　ダイアログ作成
+var objDlg = new Window("dialog", "テキストの組み方向を選択", [0,0,250,280]);
+//　固定テキスト
+var objStText01 = objDlg.add("statictext", [20,20,250,40], "テキストの組み方向を選んでください。");
+//　ラジオボタン
+var radioBtn01= objDlg.add("radiobutton", [40, 80, 140, 190], "タテ組み");
+var radioBtn02= objDlg.add("radiobutton", [130, 80, 240, 190], "ヨコ組み");
+objDlg.add("button", [60, 140, 200, 200], "配置を開始", {name:"ok"});
+objDlg.add("button", [80, 220, 180, 260], "キャンセル", {name:"cancel"});
+radioBtn01.value = true;
+objDlg.center();
+var rtType = objDlg.show();
+if (rtType==1){
+    var orientation = radioBtn01.value;
+    if(orientation === true){
+        orientation = 1986359924; }else{
+            var orientation = 1752134266;
+        }
+}else if (rtType==2){
+    fontObj.remove(); 
+    exit();
+}
+fontObj.parentStory.storyPreferences.storyOrientation = orientation;
 if (fontObj===undefined || fontObj.constructor.name !== "TextFrame") {
 	alert("「配置開始ページの基準となるテキストフレーム」が選択されていません。\n\n配置を開始するページにテキストフレームを作成し、選択した状態でスクリプトを実行してください。");
-	fontObj.remove();
-	exit();
+    fontObj.remove();
+   exit();
 }
 var activePageNum = fontObj.parentPage.name,
 	orientation = fontObj.parentStory.storyPreferences.storyOrientation,
@@ -21,15 +43,8 @@ if(leading == 1635019116){
 		var leadingMM = Number(leading) * 0.25; 
                 var leadingTEXT = leading;
 	}
-if(orientation == 1752134266){
-       var orientationTEXT = "タテ組み";
-    }else{
-       var orientationTEXT = "ヨコ組み";
-        }
-app.menuActions.item('$ID/Type Tool').invoke();
-var question = confirm("テキストの配置を開始します。\n配置されるテキストの段落スタイルは、文字ツールで選択中の内容と同一になります。\n\n配置を開始するページ：" + activePageNum + "\nフォント：" + fontFamily  + " " + fontStyle + "\nフォントサイズ：" + fontSize+ "\n行送り：" + leadingTEXT + "\n組み方向：" + orientationTEXT +"\n\n問題なければ、クリスタから書き出されたテキストファイルを選択してください。");
-if(question){}else{ fontObj.remove(); exit();}
 var txtFile = File.openDialog ("CLIP STUDIO PAINTから書き出されたテキストファイルを選択してください","*.txt");
+if (!txtFile){ fontObj.remove();  exit();}
 var dataArray = new Array();
 if(txtFile != "" && txtFile != null){
      txtFile.open("r")
@@ -87,8 +102,8 @@ if(txtFile != "" && txtFile != null){
 										maxArr.push(max);
 									}						
 								//縦組みのとき
-								if(orientation != 1752134266){
-								var sizeY = fontSizeMM*(max),
+								if(orientation == 1986359924){
+								var sizeY = fontSizeMM*(max) + 2,
 									sizeX = leadingMM*lineNum;	
 								myTextframe.visibleBounds = ["0mm","0mm", sizeY + "mm", sizeX +"mm"];
 								var border = sizeX+x;
@@ -105,8 +120,8 @@ if(txtFile != "" && txtFile != null){
 								myTextframe.move([x+boundsL,y]);	
 								x = x + sizeX;
 								}else{
-								var sizeY = leadingMM*(lineNum+1),
-									sizeX = fontSizeMM*max,
+								var sizeY = leadingMM*(lineNum+1) ,
+									sizeX = fontSizeMM*max + 2,
 									maxLineSize = leadingMM*(maxLineNum+1);	
 								myTextframe.visibleBounds = ["0mm","0mm", sizeY + "mm", sizeX +"mm"];
 								var border = sizeX+x;
@@ -122,7 +137,7 @@ if(txtFile != "" && txtFile != null){
 					}
 				}
         }
-fontObj.remove();
-alert("配置が完了しました。");
+fontObj.remove(); 
+alert("配置が完了しました。"); 
 	}
 },ScriptLanguage.JAVASCRIPT,[],UndoModes.FAST_ENTIRE_SCRIPT);
