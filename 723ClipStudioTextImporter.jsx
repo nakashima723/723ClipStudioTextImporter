@@ -1,19 +1,26 @@
+//723ClipStudioTextImporter
+//クリスタから書き出されたテキストを、IｎDesignドキュメントの各ページに自動配置するスクリプトです。
+//作成者：ナカシマ723
 app.doScript(function(){
 var fontObj=app.activeWindow.activePage.textFrames.add();
+activePageNum = fontObj.parentPage.name;
 app.menuActions.item('$ID/Type Tool').invoke();
-var objDlg = new Window("dialog", "テキストの組み方向を選択", [0,0,250,280]);
-var objStText01 = objDlg.add("statictext", [20,20,250,40], "テキストの組み方向を選んでください。");
-var radioBtn01= objDlg.add("radiobutton", [40, 80, 140, 190], "タテ組み");
-var radioBtn02= objDlg.add("radiobutton", [130, 80, 240, 190], "ヨコ組み");
-objDlg.add("button", [60, 140, 200, 200], "配置を開始", {name:"ok"});
-objDlg.add("button", [80, 220, 180, 260], "キャンセル", {name:"cancel"});
+var objDlg = new Window("dialog", "クリスタから書き出されたテキストを自動配置", [0,0,300,400]);
+var objStText01 = objDlg.add("statictext", [30,20,280,40], "選択中の段落スタイルで配置を開始します。");
+var objStText02 = objDlg.add("statictext", [80,65,280,95], "開始位置："+ activePageNum  +"ページ目");
+var objStText03 = objDlg.add("statictext", [45,120,280,140], "テキストの組み方向を選んでください。");
+var radioBtn01= objDlg.add("radiobutton", [65, 170, 150, 280], "タテ組み");
+var radioBtn02= objDlg.add("radiobutton", [160, 170, 250, 280], "ヨコ組み");
+objDlg.add("button", [40, 230, 265, 290], "ファイルを選択し、配置を開始", {name:"ok"});
+objDlg.add("button", [100, 310, 200, 350], "キャンセル", {name:"cancel"});
 radioBtn01.value = true;
 objDlg.center();
 var rtType = objDlg.show();
 if (rtType==1){
     var orientation = radioBtn01.value;
     if(orientation === true){
-        orientation = 1986359924; }else{
+        orientation = 1986359924; 
+        }else{
             var orientation = 1752134266;
         }
 }else if (rtType==2){
@@ -26,8 +33,7 @@ if (fontObj===undefined || fontObj.constructor.name !== "TextFrame") {
     fontObj.remove();
    exit();
 }
-var activePageNum = fontObj.parentPage.name,
-	orientation = fontObj.parentStory.storyPreferences.storyOrientation,
+var orientation = fontObj.parentStory.storyPreferences.storyOrientation,
 	leading = fontObj.parentStory.leading,
 	fontFamily = fontObj.parentStory.appliedFont.fontFamily,
 	fontStyle = fontObj.parentStory.appliedFont.fontStyleName,
@@ -41,6 +47,13 @@ if(leading == 1635019116){
 		var leadingMM = Number(leading) * 0.25; 
                 var leadingTEXT = leading;
 	}
+if(orientation == 1986359924){
+       var orientationTEXT = "タテ組み";
+app.menuActions.item('$ID/Vertical Type Tool').invoke();
+    }else{
+       var orientationTEXT = "ヨコ組み";
+app.menuActions.item('$ID/Type Tool').invoke();
+        }
 var txtFile = File.openDialog ("CLIP STUDIO PAINTから書き出されたテキストファイルを選択してください","*.txt");
 if (!txtFile){ fontObj.remove();  exit();}
 var dataArray = new Array();
