@@ -1,5 +1,5 @@
 //723ClipStudioTextImporter
-//クリスタから書き出されたテキストを、IｎDesignドキュメントの各ページに自動配置するスクリプトです。
+//クリスタから書き出されたテキストを、InDesignドキュメントの各ページに自動配置するスクリプトです。
 //作成者：ナカシマ723
 app.doScript(function(){
 var fontObj=app.activeWindow.activePage.textFrames.add();
