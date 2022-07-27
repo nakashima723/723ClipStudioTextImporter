@@ -1,6 +1,6 @@
 app.doScript(function(){
 var fontObj=app.activeWindow.activePage.textFrames.add();
-//　ダイアログ作成
+app.menuActions.item('$ID/Type Tool').invoke();
 var objDlg = new Window("dialog", "テキストの組み方向を選択", [0,0,250,280]);
 var objStText01 = objDlg.add("statictext", [20,20,250,40], "テキストの組み方向を選んでください。");
 var radioBtn01= objDlg.add("radiobutton", [40, 80, 140, 190], "タテ組み");
