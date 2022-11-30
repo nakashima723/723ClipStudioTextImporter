@@ -62,7 +62,7 @@ if(txtFile != "" && txtFile != null){
     var txtStr=txtFile.read();
         var txtData = new Array();
         if (txtStr=== ""){alert("空のテキストファイルが読み込まれました。処理を中断します。"); fontObj.remove(); exit();}
-        var bubbles = txtStr.split("\n\n\n");
+        var bubbles = txtStr.split("\n\n\n<<");
 		var strings = bubbles[0].split("\n");
 		var startPageNum = strings[0].replace("<<", "");
          var result = startPageNum.indexOf( "Page>>", 0);
@@ -72,7 +72,7 @@ if(txtFile != "" && txtFile != null){
 		var startPageNum = startPageNum[0];
         for (var i = 0; i < bubbles.length;i++) {	
 			var strings = bubbles[i].split("\n");
-			if (strings[0] != "" && strings[0] != null){
+			if (strings[0] !== "" && strings[0] !== null){
 			var pageNum = strings[0].replace("<<", "");
 			pageNum = pageNum.replace("Page>>", "");
 			pageNum = pageNum.split(","); 
