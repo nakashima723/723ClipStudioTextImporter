@@ -1,5 +1,5 @@
 # 723ClipStudioTextImporter
-クリスタから書き出したテキストを、各ページに自動配置するInDesignスクリプト
+CLIP STUDIO PAINT　から書き出したテキストを、各ページに自動配置するInDesignスクリプト
 ==================================
 
 使い方：
